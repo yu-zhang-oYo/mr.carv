@@ -31,6 +31,7 @@ library(SeqVarTools)
 library(STAAR)
 library(STAARpipeline)
 library(igraph)
+library(mr.carv)
 
 # load the indiviual variant association results
 X_indv <- readxl::read_excel("/Users/yzh10/Library/CloudStorage/OneDrive-IndianaUniversity/research/nuMoM2b/whole_sequencing/mr.carv/inst/extdata/TC_CHR19.xlsx", sheet = "indv_effect")
