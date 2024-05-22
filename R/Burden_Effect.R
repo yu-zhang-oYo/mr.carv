@@ -14,10 +14,10 @@ BurdenEffectSize_O <- function(G, X, working, sigma, fam, residuals, weights_B) 
   x <- t(residuals) %*% G
   sum0 <- as.numeric(x %*% weights_B)
   sumw <- as.numeric(t(weights_B) %*% Cov %*% weights_B * sigma^2)
-  burden_results <- c(sum0/sumw, 
-                      1/sqrt(sumw), 
-                      sum0, 
-                      sqrt(sumw), 
+  burden_results <- c(sum0/sumw,
+                      1/sqrt(sumw),
+                      sum0,
+                      sqrt(sumw),
                       pchisq(sum0^2/sumw, 1, lower.tail=FALSE))
   return(burden_results)
 }
@@ -28,10 +28,10 @@ BurdenEffectSize_O_SMMAT <- function(G, P, residuals, weights_B) {
   x <- t(residuals) %*% G
   sum0 <- as.numeric(x %*% weights_B)
   sumw <- as.numeric(t(weights_B) %*% Cov %*% weights_B)
-  burden_results <- c(sum0/sumw, 
-                      1/sqrt(sumw), 
-                      sum0, 
-                      sqrt(sumw), 
+  burden_results <- c(sum0/sumw,
+                      1/sqrt(sumw),
+                      sum0,
+                      sqrt(sumw),
                       pchisq(sum0^2/sumw, 1, lower.tail=FALSE))
   return(burden_results)
 }
@@ -43,17 +43,17 @@ BurdenEffectSize_O_SMMAT_sparse <- function(G, Sigma_i, Sigma_iX, cov, residuals
   x <- t(residuals) %*% G
   sum0 <- as.numeric(x %*% weights_B)
   sumw <- as.numeric(t(weights_B) %*% Cov %*% weights_B)
-  burden_results <- c(sum0/sumw, 
-                      1/sqrt(sumw), 
-                      sum0, 
-                      sqrt(sumw), 
+  burden_results <- c(sum0/sumw,
+                      1/sqrt(sumw),
+                      sum0,
+                      sqrt(sumw),
                       pchisq(sum0^2/sumw, 1, lower.tail=FALSE))
   return(burden_results)
 }
 
 
 # final calculation of effect size
-# or we add this into the STAAR.R code so that it can output all the burden effect size and the Burden variable for certatin annotation, 
+# or we add this into the STAAR.R code so that it can output all the burden effect size and the Burden variable for certatin annotation,
 # we need to revise the code in STAAR_pipeline to output the effect sizes
 Burden_Effect <- function(genotype, obj_nullmodel, beta_par=c(1,1), annotation_phred = NULL, rare_maf_cutoff = 0.01, rv_num_cutoff = 2) {
 
@@ -87,11 +87,11 @@ Burden_Effect <- function(genotype, obj_nullmodel, beta_par=c(1,1), annotation_p
     MAF <- MAF[RV_label]
     rm(Geno_rare)
     gc()
-    
+
     # Burden weights
     ## default beta(1,1)
     w_B <- dbeta(MAF, beta_par[1], beta_par[2])
-    
+
     if(!is.null(annotation_phred)){
       annotation_phred <- annotation_phred[RV_label]
       ## beta * the annotation function score
@@ -102,14 +102,14 @@ Burden_Effect <- function(genotype, obj_nullmodel, beta_par=c(1,1), annotation_p
     # weight the rare variants on a gene set into a Burden variable by annotation score for each individual
     # how to consider the relatedness of individuals when calculating the correlation of gene-sets
     Geno_rare_weighted <- G %*% w_B
-    
+
     if(obj_nullmodel$relatedness){
       if(!obj_nullmodel$sparse_kins){
         P <- obj_nullmodel$P
         residuals.phenotype <- obj_nullmodel$scaled.residuals
 
         Burden_Effect_Size <- BurdenEffectSize_O_SMMAT(G, P, residuals=residuals.phenotype, weights_B=w_B)
-        
+
       } else {
         Sigma_i <- obj_nullmodel$Sigma_i
         Sigma_iX <- as.matrix(obj_nullmodel$Sigma_iX)
@@ -117,7 +117,7 @@ Burden_Effect <- function(genotype, obj_nullmodel, beta_par=c(1,1), annotation_p
 
         residuals.phenotype <- obj_nullmodel$scaled.residuals
 
-        Burden_Effect_Size <- BurdenEffectSize_O_SMMAT_sparse(G, Sigma_i, Sigma_iX, cov, residuals.phenotype, weights_B=w_B)
+        Burden_Effect_Size <- BurdenEffectSize_O_SMMAT_sparse(G, Sigma_i, Sigma_iX, cov, residuals=residuals.phenotype, weights_B=w_B)
       }
     } else {
       X <- model.matrix(obj_nullmodel)
@@ -133,9 +133,9 @@ Burden_Effect <- function(genotype, obj_nullmodel, beta_par=c(1,1), annotation_p
 
       Burden_Effect_Size <- BurdenEffectSize_O(G, X, working, sigma, fam, residuals.phenotype, weights_B=w_B)
     }
-    
+
     names(Burden_Effect_Size) <- c("Burden_Est", "Burden_SE_Est", "Burden_Score_Stat", "Burden_SE_Score", "Burden_pvalue")
-    
+
     return(list(
       num_variant = sum(RV_label),
       cMAC = sum(G),
