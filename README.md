@@ -66,7 +66,7 @@ for(chr in c(19,22)){
   agds.path <- paste0("../gds/freeze.11a.chr", chr, ".pass_and_fail.gtonly.minDP10.gds")
   # Open the GDS file
   genofile <- seqOpen(agds.path)
-  results[[paste0("chr", chr)]] <- select_LE_Estimate(chr, df_indv, df_gene, genofile=genofile, obj_nullmodel=obj_nullmodel, 
+  results[[paste0("chr", chr)]] <- select_LE_Estimate(chr, df_indv=X_indv, df_gene=X_gene, genofile=genofile, obj_nullmodel=obj_nullmodel, 
                                                       rare_maf_cutoff=rare_maf_cutoff, rv_num_cutoff=2,
                                                       QC_label=QC_label,variant_type_indv=variant_type_indv,variant_type_gene=variant_type_gene,
                                                       geno_missing_imputation=geno_missing_imputation,
