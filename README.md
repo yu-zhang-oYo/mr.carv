@@ -25,6 +25,7 @@ Here's a quick example to get you started:
 
 ```
 ## load required packages
+library(Matrix)
 library(gdsfmt)
 library(SeqArray)
 library(SeqVarTools)
