@@ -14,7 +14,7 @@ You can install the released version of `mr.carv` from github with:
 
 ```
 # install.packages("devtools")
-devtools::install_github("yourusername/mr.carv")
+devtools::install_github("yu-zhang-oYo/mr.carv")
 ```
 
 ## Usage
