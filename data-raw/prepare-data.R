@@ -12,9 +12,9 @@ gene_effect <- read_excel(file_path, sheet = "gene_effect")
 # Combine the data if needed, otherwise save as separate objects
 TC_CHR19 <- list(indv_effect = indv_effect, gene_effect = gene_effect)
 
-# Read the individual analysis data
-individual_analysis_path <- "inst/extdata/individual_analysis_19.out"
-individual_analysis_19 <- read.table(individual_analysis_path, header = TRUE, quote = "", stringsAsFactors = FALSE)
+# # Read the individual analysis data
+# individual_analysis_path <- "inst/extdata/individual_analysis_19.out"
+# individual_analysis_19 <- read.table(individual_analysis_path, header = TRUE, quote = "", stringsAsFactors = FALSE)
 
 # Save the datasets in the data directory
-usethis::use_data(TC_CHR19, individual_analysis_19, overwrite = TRUE)
+usethis::use_data(TC_CHR19, overwrite = TRUE)

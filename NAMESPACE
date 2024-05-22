@@ -2,6 +2,4 @@
 
 export(Gene_Centric_Coding_Burden)
 export(Gene_Centric_Coding_Burden_each)
-export(TC_CHR19)
-export(individual_analysis_19)
 export(select_LE_Estimate)
