@@ -6,7 +6,7 @@ Author: Yu Zhang
 Maintainer: Yu Zhang <zy2335778670@gmail.com>
 Description: An R package for performing two sample Mendelian Randomization considering both common and rare variants
 Depends: R (>= 4.4.0)
-Imports: readxl, igraph, STAARpipeline, Rcpp, STAAR, MultiSTAAR, SCANG, dplyr, SeqArray, SeqVarTools, GenomicFeatures, TxDb.Hsapiens.UCSC.hg38.knownGene, GMMAT, GENESIS, Matrix, methods
+Imports: readxl, igraph, stats, STAARpipeline, Rcpp, STAAR, MultiSTAAR, SCANG, dplyr, SeqArray, SeqVarTools, GenomicFeatures, TxDb.Hsapiens.UCSC.hg38.knownGene, GMMAT, GENESIS, Matrix, methods
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
