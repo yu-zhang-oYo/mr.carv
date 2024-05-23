@@ -87,9 +87,35 @@ obj <- readRDS("summary_statistics.rds")
 3. Perform the Mendelian Randomization
 
 ```
+# Load necessary package
+library(dplyr)
+library(MendelianRandomization)
 
-  
-                 
+# Initialize empty data frames for the combined results
+combined_X_gene <- data.frame()
+combined_X_indv <- data.frame()
+combined_Y_gene <- data.frame()
+combined_Y_indv <- data.frame()
+
+# Iterate over each chromosome's result
+for (chromosome_result in results) {
+  combined_X_gene <- bind_rows(combined_X_gene, chromosome_result$X_gene)
+  combined_X_indv <- bind_rows(combined_X_indv, chromosome_result$X_indv)
+  combined_Y_gene <- bind_rows(combined_Y_gene, chromosome_result$Y_gene)
+  combined_Y_indv <- bind_rows(combined_Y_indv, chromosome_result$Y_indv)
+}
+
+# Create an MRInput object
+MR_object <- mr_input(
+  bx = c(combined_X_indv$Est, combined_X_gene$Est),
+  bxse = c(combined_X_indv$Est_se, combined_X_gene$Est_se),
+  by = c(combined_Y_indv$Est, combined_Y_gene$Est),
+  byse = c(combined_Y_indv$Est_se, combined_Y_gene$Est_se)
+)
+
+# Perform MR analysis using IVW
+MR_result <- mr_ivw(MR_object)
+MR_result         
 ```
 
 

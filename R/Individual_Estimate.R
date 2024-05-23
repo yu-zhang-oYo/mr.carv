@@ -1,3 +1,25 @@
+#' Estimate Individual Variant Effects
+#'
+#' This function estimates the effects of individual variants on the outcome, given the variant information, genotype data, and a null model.
+#'
+#' @param chr Chromosome number.
+#' @param df_indv A data frame containing individual variant information with columns: `CHR`, `POS`, `annotation.id`, `REF`, and `ALT`.
+#' @param genofile An opened annotated GDS (aGDS) file object containing genotype data.
+#' @param obj_nullmodel A null model object containing information about the model fit and residuals.
+#' @param mac_cutoff Minor allele count cutoff for rare variants. Default is 20.
+#' @param QC_label Quality control label. Default is `"annotation/filter"`.
+#' @param variant_type Type of variant to include in the analysis. Choices are `"variant"`, `"SNV"`, or `"Indel"`. Default is `"variant"`.
+#' @param geno_missing_imputation Method for handling missing genotypes. Choices are `"mean"` or `"minor"`. Default is `"mean"`.
+#'
+#' @return A list containing:
+#' \item{Variant_Estimate}{A data frame with columns: `CHR`, `variant.id`, `annotation.id`, `POS`, `REF`, `ALT`, `ALT_AF`, `MAF`, `N`, `pvalue`, `pvalue_log10`, `Score`, `Score_se`, `Est`, `Est_se`.}
+#' \item{Variant_dosg}{A matrix of genotype dosages for the selected variants.}
+#'
+#' @import SeqArray
+#' @importFrom SeqVarTools isSNV
+#' @importFrom dplyr inner_join left_join
+#' @export
+
 
 
 # input the variant information to calculate the individual outcome to get the score estimates
