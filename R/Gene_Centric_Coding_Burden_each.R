@@ -406,6 +406,8 @@ Gene_Centric_Coding_Burden_each <- function(chr, gene_name, category=c("plof","p
     results_temp$Burden_Effect_Size <- burden_effects$Burden_Effect_Size
     results_temp$Burden_Variable <- burden_effects$Burden_Variable
     rownames(results_temp$Burden_Variable) <- seqGetData(genofile, "sample.id")
+  } else{
+    results_temp <- NULL
   }
 
   seqResetFilter(genofile)

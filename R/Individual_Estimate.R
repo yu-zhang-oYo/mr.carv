@@ -93,6 +93,11 @@ Individual_Estimate <- function(chr, df_indv, genofile, obj_nullmodel, mac_cutof
   # ? do not consider the harmony of the Reference allele.
   df_merge <- dplyr::inner_join(df_indv, df_all, by = c("CHR", "POS", "annotation.id", "REF", "ALT"))
 
+  if(nrow(df_merge) == 0) {
+    seqResetFilter(genofile)
+    return(NULL)
+  }
+
   seqSetFilter(genofile,variant.id=df_merge$variant.id, sample.id=phenotype.id)
 
   ## to make sure the Geno matrix have the same sample as in the outcome data, just in case some individuals in the outcome does not have the genotype.
@@ -230,9 +235,12 @@ Individual_Estimate <- function(chr, df_indv, genofile, obj_nullmodel, mac_cutof
     results <- rbind(results,results_temp)
   }
 
-  rownames(Variant_dosg) <- phenotype.id
-
-
+  if(!is.null(Variant_dosg)){
+    rownames(Variant_dosg) <- phenotype.id
+  } else{
+    seqResetFilter(genofile)
+    return(NULL)
+  }
 
   seqResetFilter(genofile)
   return(list(Variant_Estimate=results, Variant_dosg=Variant_dosg))

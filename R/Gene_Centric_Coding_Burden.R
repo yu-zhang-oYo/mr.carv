@@ -32,6 +32,11 @@ Gene_Centric_Coding_Burden <- function(chr, df_gene, genofile, obj_nullmodel, ra
                                                Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
                                                Beta_Annotation= df_gene$annotation[i],silent=FALSE)
   }
+  if(length(results)==0){
+    results <- NULL
+  } else {
+    results <- Filter(Negate(is.null), results)
+  }
   return(results)
 }
 

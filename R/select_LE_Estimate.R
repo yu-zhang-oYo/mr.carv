@@ -47,9 +47,13 @@ select_LE_Estimate <- function(chr, df_indv, df_gene, genofile, obj_nullmodel, r
     results_indv <- Individual_Estimate(chr=chr, df_indv=df_indv_chr, genofile=genofile, obj_nullmodel=obj_nullmodel,
                                         QC_label=QC_label, variant_type=variant_type_indv, geno_missing_imputation=geno_missing_imputation)
 
-    # Keep the rows in df_indv_chr that match results_indv[["Variant_Estimate"]]
-    X_indv <- merge(df_indv_chr, results_indv[["Variant_Estimate"]][,c("CHR", "POS", "annotation.id", "REF", "ALT")], by = c("CHR", "POS", "annotation.id", "REF", "ALT"))
-    X_indv <- X_indv[order(match(X_indv$annotation.id, results_indv[["Variant_Estimate"]]$annotation.id)), ]
+    if(!is.null(results_indv)){
+      # Keep the rows in df_indv_chr that match results_indv[["Variant_Estimate"]]
+      X_indv <- merge(df_indv_chr, results_indv[["Variant_Estimate"]][,c("CHR", "POS", "annotation.id", "REF", "ALT")], by = c("CHR", "POS", "annotation.id", "REF", "ALT"))
+      X_indv <- X_indv[order(match(X_indv$annotation.id, results_indv[["Variant_Estimate"]]$annotation.id)), ]
+    } else{
+      X_indv <- NULL
+      }
   }
 
   df_gene_chr <- df_gene[df_gene$CHR == chr, ]
@@ -60,24 +64,29 @@ select_LE_Estimate <- function(chr, df_indv, df_gene, genofile, obj_nullmodel, r
                                                rare_maf_cutoff=rare_maf_cutoff, QC_label=QC_label,
                                                variant_type=variant_type_gene, geno_missing_imputation=geno_missing_imputation,
                                                Annotation_dir=Annotation_dir, Annotation_name_catalog=Annotation_name_catalog, silent=silent)
-    results_gene_chr <- lapply(results_gene, function(x) {
-      data.frame(
-        CHR = x$Chr,
-        gene_name = x$Gene_name,
-        category = x$Category,
-        annotation = x$Annotation,
-        Est = x$Burden_Effect_Size[1],
-        Est_se = x$Burden_Effect_Size[2],
-        pvalue = x$Burden_Effect_Size[5],
-        "No.of SNV" = x$`#SNV`
-      )
-    }) %>% do.call(rbind, .)
 
-    # Add a temporary ID to results_gene_chr to preserve order
-    results_gene_chr$temp_id <- 1:nrow(results_gene_chr)
-    X_gene <- merge(df_gene_chr, results_gene_chr[,c("CHR", "gene_name", "category", "annotation", "temp_id")], by = c("CHR", "gene_name", "category", "annotation"))
-    X_gene <- X_gene[order(match(X_gene$temp_id, results_gene_chr$temp_id)), ]
-    X_gene$temp_id <- NULL
+    if(!is.null(results_gene)){
+      results_gene_chr <- lapply(results_gene, function(x) {
+        data.frame(
+          CHR = x$Chr,
+          gene_name = x$Gene_name,
+          category = x$Category,
+          annotation = x$Annotation,
+          Est = x$Burden_Effect_Size[1],
+          Est_se = x$Burden_Effect_Size[2],
+          pvalue = x$Burden_Effect_Size[5],
+          "No.of SNV" = x$`#SNV`
+        )
+      }) %>% do.call(rbind, .)
+      # Add a temporary ID to results_gene_chr to preserve order
+      results_gene_chr$temp_id <- 1:nrow(results_gene_chr)
+      X_gene <- merge(df_gene_chr, results_gene_chr[,c("CHR", "gene_name", "category", "annotation", "temp_id")], by = c("CHR", "gene_name", "category", "annotation"))
+      X_gene <- X_gene[order(match(X_gene$temp_id, results_gene_chr$temp_id)), ]
+      X_gene$temp_id <- NULL
+    } else {
+      X_gene <- NULL
+    }
+
   }
 
   # Calculate correlation between genes and individual SNPs
