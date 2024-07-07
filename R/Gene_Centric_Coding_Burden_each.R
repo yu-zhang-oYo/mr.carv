@@ -18,6 +18,7 @@
 #' @param geno_missing_imputation method of handling missing genotypes. Either "mean" or "minor" (default = "mean").
 #' @param Annotation_dir channel name of the annotations in the aGDS file \cr (default = "annotation/info/FunctionalAnnotation").
 #' @param Annotation_name_catalog a data frame containing the name and the corresponding channel name in the aGDS file.
+#' @param Beta_Annotation annotation weight used in the summary statistics.
 #' @param silent logical: should the report of error messages be suppressed (default = FALSE).
 #' @return a list containing the information of the given gene, Burden variable, and Burden effect size.
 #' @export

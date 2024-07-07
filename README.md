@@ -37,7 +37,8 @@ library(mr.carv)
 # load the indiviual variant association results
 X_indv <- readxl::read_excel("/Users/yzh10/Library/CloudStorage/OneDrive-IndianaUniversity/research/nuMoM2b/whole_sequencing/mr.carv/inst/extdata/TC.xlsx", sheet = "indv_effect")
 # load the gene centric coding region association results
-X_gene <- readxl::read_excel("/Users/yzh10/Library/CloudStorage/OneDrive-IndianaUniversity/research/nuMoM2b/whole_sequencing/mr.carv/inst/extdata/TC.xlsx", sheet = "gene_effect")
+X_gene_coding <- readxl::read_excel("/Users/yzh10/Library/CloudStorage/OneDrive-IndianaUniversity/research/nuMoM2b/whole_sequencing/mr.carv/inst/extdata/TC.xlsx", sheet = "coding")
+X_gene_noncoding <- readxl::read_excel("/Users/yzh10/Library/CloudStorage/OneDrive-IndianaUniversity/research/nuMoM2b/whole_sequencing/mr.carv/inst/extdata/TC.xlsx", sheet = "noncoding")
 
 # check the data format
 help(TC)
