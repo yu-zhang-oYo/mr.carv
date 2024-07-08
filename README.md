@@ -23,6 +23,8 @@ Here's a quick example to get you started:
 
 1. load required package and the genetic association data with TC
 
+the data are saved in the folder 'inst/extdata/' of the package
+
 ```
 ## load required packages
 library(Matrix)
@@ -39,13 +41,16 @@ X_indv <- readxl::read_excel("/Users/yzh10/Library/CloudStorage/OneDrive-Indiana
 # load the gene centric coding region association results
 X_gene_coding <- readxl::read_excel("/Users/yzh10/Library/CloudStorage/OneDrive-IndianaUniversity/research/nuMoM2b/whole_sequencing/mr.carv/inst/extdata/TC.xlsx", sheet = "coding")
 X_gene_noncoding <- readxl::read_excel("/Users/yzh10/Library/CloudStorage/OneDrive-IndianaUniversity/research/nuMoM2b/whole_sequencing/mr.carv/inst/extdata/TC.xlsx", sheet = "noncoding")
-
+X_window <- readxl::read_excel("/Users/yzh10/Library/CloudStorage/OneDrive-IndianaUniversity/research/nuMoM2b/whole_sequencing/mr.carv/inst/extdata/TC.xlsx", sheet = "window")
 # check the data format
 help(TC)
 
 ```
 
 2. select the SNPs that are in linkage equilibrium, and save the summary statistics
+
+Note: you can try pvalues_weight=FALSE or TRUE to check the difference of the results.
+
 ```
 setwd("/Users/yzh10/Library/CloudStorage/OneDrive-IndianaUniversity/research/nuMoM2b/whole_sequencing/real_data/GA")
 ## Null model
@@ -64,6 +69,7 @@ Annotation_dir <- "annotation/info/FunctionalAnnotation"
 ## Annotation channel
 Annotation_name_catalog <- get(load("../Annotation_name_catalog.Rdata"))
 rare_maf_cutoff <- 0.05
+rv_num_cutoff <- 2
 
 results <- list()
 for(chr in c(19,22)){
@@ -71,7 +77,8 @@ for(chr in c(19,22)){
   agds.path <- paste0("../gds/freeze.11a.chr", chr, ".pass_and_fail.gtonly.minDP10.gds")
   # Open the GDS file
   genofile <- seqOpen(agds.path)
-  results[[paste0("chr", chr)]] <- select_LE_Estimate(chr, df_indv=X_indv, df_gene=X_gene, genofile=genofile, obj_nullmodel=obj_nullmodel, 
+  results[[paste0("chr", chr)]] <- select_LE_Estimate(chr, df_indv=X_indv, df_coding=X_gene_coding, df_noncoding=X_gene_noncoding, df_window=X_window, 
+                                                      genofile=genofile, obj_nullmodel=obj_nullmodel, 
                                                       rare_maf_cutoff=rare_maf_cutoff, rv_num_cutoff=2,
                                                       QC_label=QC_label,variant_type_indv=variant_type_indv,variant_type_gene=variant_type_gene,
                                                       geno_missing_imputation=geno_missing_imputation,

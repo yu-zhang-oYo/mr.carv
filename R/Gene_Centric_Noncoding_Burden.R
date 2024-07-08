@@ -26,6 +26,7 @@ Gene_Centric_Noncoding_Burden <- function(chr, df_gene, genofile, obj_nullmodel,
                                        Annotation_dir="annotation/info/FunctionalAnnotation", Annotation_name_catalog, silent=FALSE){
   results <- list()
   for (i in 1:nrow(df_gene)) {
+
     results[[i]] <- Gene_Centric_Noncoding_Burden_each(chr=df_gene$CHR[i], gene_name=df_gene$gene_name[i], category=df_gene$category[i],
                                                     genofile=genofile, obj_nullmodel=obj_nullmodel, rare_maf_cutoff=rare_maf_cutoff, rv_num_cutoff=rv_num_cutoff,
                                                     QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
