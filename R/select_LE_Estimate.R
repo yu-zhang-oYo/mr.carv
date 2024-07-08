@@ -209,9 +209,9 @@ select_LE_Estimate <- function(chr, df_indv, df_coding, df_noncoding, df_window,
       # Combine p-values from genes and individuals
       pvalues <- c(pvalues_coding, pvalues_noncoding, pvalues_window, pvalues_indv)
 
-      # Using lapply to calculate the sum of P-values in each set
+      # Using lapply to calculate the sum/mean of P-values in each set
       sums_pvalues <- lapply(independent_sets, function(x) {
-        sum(pvalues[x])  # Sum the P-values at these indices
+        mean(pvalues[x])  # Sum the P-values at these indices
       })
 
       # Find the index of the set with the minimum sum of P-values
