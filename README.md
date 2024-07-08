@@ -37,11 +37,11 @@ library(igraph)
 library(mr.carv)
 
 # load the indiviual variant association results
-X_indv <- readxl::read_excel("/Users/yzh10/Library/CloudStorage/OneDrive-IndianaUniversity/research/nuMoM2b/whole_sequencing/mr.carv/inst/extdata/TC.xlsx", sheet = "indv_effect")
+lipid_indv <- readxl::read_excel("/Users/yzh10/Library/CloudStorage/OneDrive-IndianaUniversity/research/nuMoM2b/whole_sequencing/mr.carv/inst/extdata/TC.xlsx", sheet = "indv_effect")
 # load the gene centric coding region association results
-X_gene_coding <- readxl::read_excel("/Users/yzh10/Library/CloudStorage/OneDrive-IndianaUniversity/research/nuMoM2b/whole_sequencing/mr.carv/inst/extdata/TC.xlsx", sheet = "coding")
-X_gene_noncoding <- readxl::read_excel("/Users/yzh10/Library/CloudStorage/OneDrive-IndianaUniversity/research/nuMoM2b/whole_sequencing/mr.carv/inst/extdata/TC.xlsx", sheet = "noncoding")
-X_window <- readxl::read_excel("/Users/yzh10/Library/CloudStorage/OneDrive-IndianaUniversity/research/nuMoM2b/whole_sequencing/mr.carv/inst/extdata/TC.xlsx", sheet = "window")
+lipid_gene_coding <- readxl::read_excel("/Users/yzh10/Library/CloudStorage/OneDrive-IndianaUniversity/research/nuMoM2b/whole_sequencing/mr.carv/inst/extdata/TC.xlsx", sheet = "coding")
+lipid_gene_noncoding <- readxl::read_excel("/Users/yzh10/Library/CloudStorage/OneDrive-IndianaUniversity/research/nuMoM2b/whole_sequencing/mr.carv/inst/extdata/TC.xlsx", sheet = "noncoding")
+lipid_window <- readxl::read_excel("/Users/yzh10/Library/CloudStorage/OneDrive-IndianaUniversity/research/nuMoM2b/whole_sequencing/mr.carv/inst/extdata/TC.xlsx", sheet = "window")
 # check the data format
 help(TC)
 
@@ -77,13 +77,13 @@ for(chr in c(19,22)){
   agds.path <- paste0("../gds/freeze.11a.chr", chr, ".pass_and_fail.gtonly.minDP10.gds")
   # Open the GDS file
   genofile <- seqOpen(agds.path)
-  results[[paste0("chr", chr)]] <- select_LE_Estimate(chr, df_indv=X_indv, df_coding=X_gene_coding, df_noncoding=X_gene_noncoding, df_window=X_window, 
+  results[[paste0("chr", chr)]] <- select_LE_Estimate(chr, df_indv=lipid_indv, df_coding=lipid_gene_coding, df_noncoding=lipid_gene_noncoding, df_window=lipid_window, 
                                                       genofile=genofile, obj_nullmodel=obj_nullmodel, 
                                                       rare_maf_cutoff=rare_maf_cutoff, rv_num_cutoff=2,
                                                       QC_label=QC_label,variant_type_indv=variant_type_indv,variant_type_gene=variant_type_gene,
                                                       geno_missing_imputation=geno_missing_imputation,
                                                       Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
-                                                      le_threshold=0.1, pvalues_weight=FALSE, silent=FALSE)
+                                                      le_threshold=0.1, pvalues_weight=TRUE, silent=FALSE)
   # Close the GDS file
   seqClose(genofile)
 }

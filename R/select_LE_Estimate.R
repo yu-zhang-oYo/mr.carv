@@ -46,14 +46,14 @@ select_LE_Estimate <- function(chr, df_indv, df_coding, df_noncoding, df_window,
   } else {
     results_indv <- Individual_Estimate(chr=chr, df_indv=df_indv_chr, genofile=genofile, obj_nullmodel=obj_nullmodel,
                                         QC_label=QC_label, variant_type=variant_type_indv, geno_missing_imputation=geno_missing_imputation)
+  }
 
-    if(!is.null(results_indv)){
-      # Keep the rows in df_indv_chr that match results_indv[["Variant_Estimate"]]
-      X_indv <- merge(df_indv_chr, results_indv[["Variant_Estimate"]][,c("CHR", "POS", "annotation.id", "REF", "ALT")], by = c("CHR", "POS", "annotation.id", "REF", "ALT"))
-      X_indv <- X_indv[order(match(X_indv$annotation.id, results_indv[["Variant_Estimate"]]$annotation.id)), ]
-    } else{
-      X_indv <- NULL
-    }
+  if(!is.null(results_indv)){
+    # Keep the rows in df_indv_chr that match results_indv[["Variant_Estimate"]]
+    X_indv <- merge(df_indv_chr, results_indv[["Variant_Estimate"]][,c("CHR", "POS", "annotation.id", "REF", "ALT")], by = c("CHR", "POS", "annotation.id", "REF", "ALT"))
+    X_indv <- X_indv[order(match(X_indv$annotation.id, results_indv[["Variant_Estimate"]]$annotation.id)), ]
+  } else{
+    X_indv <- NULL
   }
 
   # Process coding regions
@@ -65,29 +65,29 @@ select_LE_Estimate <- function(chr, df_indv, df_coding, df_noncoding, df_window,
                                                  rare_maf_cutoff=rare_maf_cutoff, QC_label=QC_label,
                                                  variant_type=variant_type_gene, geno_missing_imputation=geno_missing_imputation,
                                                  Annotation_dir=Annotation_dir, Annotation_name_catalog=Annotation_name_catalog, silent=silent)
+  }
 
-    if(!is.null(results_coding)){
-      results_coding_chr <- lapply(results_coding, function(x) {
-        data.frame(
-          CHR = x$Chr,
-          gene_name = x$Gene_name,
-          category = x$Category,
-          annotation = x$Annotation,
-          Est = x$Burden_Effect_Size[1],
-          Est_se = x$Burden_Effect_Size[2],
-          pvalue = x$Burden_Effect_Size[5],
-          "No.of SNV" = x$`#SNV`
-        )
-      }) %>% do.call(rbind, .)
-      # Add a temporary ID to results_coding_chr to preserve the order of results
-      results_coding_chr$temp_id <- 1:nrow(results_coding_chr)
-      X_coding <- merge(df_coding_chr, results_coding_chr[,c("CHR", "gene_name", "category", "annotation", "temp_id")], by = c("CHR", "gene_name", "category", "annotation"))
-      X_coding <- X_coding[order(match(X_coding$temp_id, results_coding_chr$temp_id)), ]
-      X_coding$temp_id <- NULL
-    } else {
-      X_coding <- NULL
-    }
-
+  if(!is.null(results_coding)){
+    results_coding_chr <- lapply(results_coding, function(x) {
+      data.frame(
+        CHR = x$Chr,
+        gene_name = x$Gene_name,
+        category = x$Category,
+        annotation = x$Annotation,
+        Est = x$Burden_Effect_Size[1],
+        Est_se = x$Burden_Effect_Size[2],
+        pvalue = x$Burden_Effect_Size[5],
+        "No.of SNV" = x$`#SNV`
+      )
+    }) %>% do.call(rbind, .)
+    # Add a temporary ID to results_coding_chr to preserve the order of results
+    results_coding_chr$temp_id <- 1:nrow(results_coding_chr)
+    X_coding <- merge(df_coding_chr, results_coding_chr[,c("CHR", "gene_name", "category", "annotation", "temp_id")], by = c("CHR", "gene_name", "category", "annotation"))
+    X_coding <- X_coding[order(match(X_coding$temp_id, results_coding_chr$temp_id)), ]
+    X_coding$temp_id <- NULL
+  } else {
+    X_coding <- NULL
+    results_coding_chr <- NULL
   }
 
   # Process noncoding regions
@@ -99,28 +99,29 @@ select_LE_Estimate <- function(chr, df_indv, df_coding, df_noncoding, df_window,
                                                        rare_maf_cutoff=rare_maf_cutoff, rv_num_cutoff=rv_num_cutoff,
                                                        QC_label=QC_label, variant_type=variant_type_gene, geno_missing_imputation=geno_missing_imputation,
                                                        Annotation_dir=Annotation_dir, Annotation_name_catalog=Annotation_name_catalog, silent=silent)
+  }
 
-    if (!is.null(results_noncoding)) {
-      results_noncoding_chr <- lapply(results_noncoding, function(x) {
-        data.frame(
-          CHR = x$Chr,
-          gene_name = x$Gene_name,
-          category = x$Category,
-          annotation = x$Annotation,
-          Est = x$Burden_Effect_Size[1],
-          Est_se = x$Burden_Effect_Size[2],
-          pvalue = x$Burden_Effect_Size[5],
-          "No.of SNV" = x$`#SNV`
-        )
-      }) %>% do.call(rbind, .)
-      # Add a temporary ID to results_noncoding_chr to preserve the order of results
-      results_noncoding_chr$temp_id <- 1:nrow(results_noncoding_chr)
-      X_noncoding <- merge(df_noncoding_chr, results_noncoding_chr[, c("CHR", "gene_name", "category", "annotation", "temp_id")], by = c("CHR", "gene_name", "category", "annotation"))
-      X_noncoding <- X_noncoding[order(match(X_noncoding$temp_id, results_noncoding_chr$temp_id)), ]
-      X_noncoding$temp_id <- NULL
-    } else {
-      X_noncoding <- NULL
-    }
+  if (!is.null(results_noncoding)) {
+    results_noncoding_chr <- lapply(results_noncoding, function(x) {
+      data.frame(
+        CHR = x$Chr,
+        gene_name = x$Gene_name,
+        category = x$Category,
+        annotation = x$Annotation,
+        Est = x$Burden_Effect_Size[1],
+        Est_se = x$Burden_Effect_Size[2],
+        pvalue = x$Burden_Effect_Size[5],
+        "No.of SNV" = x$`#SNV`
+      )
+    }) %>% do.call(rbind, .)
+    # Add a temporary ID to results_noncoding_chr to preserve the order of results
+    results_noncoding_chr$temp_id <- 1:nrow(results_noncoding_chr)
+    X_noncoding <- merge(df_noncoding_chr, results_noncoding_chr[, c("CHR", "gene_name", "category", "annotation", "temp_id")], by = c("CHR", "gene_name", "category", "annotation"))
+    X_noncoding <- X_noncoding[order(match(X_noncoding$temp_id, results_noncoding_chr$temp_id)), ]
+    X_noncoding$temp_id <- NULL
+  } else {
+    X_noncoding <- NULL
+    results_noncoding_chr <- NULL
   }
 
   # Process window regions
@@ -132,28 +133,29 @@ select_LE_Estimate <- function(chr, df_indv, df_coding, df_noncoding, df_window,
                                     rare_maf_cutoff=rare_maf_cutoff, rv_num_cutoff=rv_num_cutoff,
                                     QC_label=QC_label, variant_type=variant_type_gene, geno_missing_imputation=geno_missing_imputation,
                                     Annotation_dir=Annotation_dir, Annotation_name_catalog=Annotation_name_catalog, silent=silent)
+  }
 
-    if (!is.null(results_window)) {
-      results_window_chr <- lapply(results_window, function(x) {
-        data.frame(
-          CHR = x$Chr,
-          Start.Loc = x$Start_loc,
-          End.Loc = x$End_loc,
-          annotation = x$Annotation,
-          Est = x$Burden_Effect_Size[1],
-          Est_se = x$Burden_Effect_Size[2],
-          pvalue = x$Burden_Effect_Size[5],
-          "No.of SNV" = x$`#SNV`
-        )
-      }) %>% do.call(rbind, .)
-      # Add a temporary ID to results_window_chr to preserve the order of results
-      results_window_chr$temp_id <- 1:nrow(results_window_chr)
-      X_window <- merge(df_window_chr, results_window_chr[, c("CHR", "Start.Loc", "End.Loc", "annotation", "temp_id")], by = c("CHR", "Start.Loc", "End.Loc", "annotation"))
-      X_window <- X_window[order(match(X_window$temp_id, results_window_chr$temp_id)), ]
-      X_window$temp_id <- NULL
-    } else {
-      X_window <- NULL
-    }
+  if (!is.null(results_window)) {
+    results_window_chr <- lapply(results_window, function(x) {
+      data.frame(
+        CHR = x$Chr,
+        Start.Loc = x$Start_loc,
+        End.Loc = x$End_loc,
+        annotation = x$Annotation,
+        Est = x$Burden_Effect_Size[1],
+        Est_se = x$Burden_Effect_Size[2],
+        pvalue = x$Burden_Effect_Size[5],
+        "No.of SNV" = x$`#SNV`
+      )
+    }) %>% do.call(rbind, .)
+    # Add a temporary ID to results_window_chr to preserve the order of results
+    results_window_chr$temp_id <- 1:nrow(results_window_chr)
+    X_window <- merge(df_window_chr, results_window_chr[, c("CHR", "Start.Loc", "End.Loc", "annotation", "temp_id")], by = c("CHR", "Start.Loc", "End.Loc", "annotation"))
+    X_window <- X_window[order(match(X_window$temp_id, results_window_chr$temp_id)), ]
+    X_window$temp_id <- NULL
+  } else {
+    X_window <- NULL
+    results_window_chr <- NULL
   }
 
   # Calculate correlation between genes and individual SNPs
@@ -228,15 +230,15 @@ select_LE_Estimate <- function(chr, df_indv, df_coding, df_noncoding, df_window,
     selected_window_indx <- as.numeric(selected_indx[(selected_indx > num_coding + num_noncoding) & (selected_indx <= num_coding + num_noncoding + num_window)]) - (num_coding + num_noncoding)
     selected_indv_indx <- as.numeric(selected_indx[selected_indx > num_coding + num_noncoding + num_window]) - (num_coding + num_noncoding + num_window)
 
-    results_coding_chr <- if (!is.null(results_coding_chr)) results_coding_chr[selected_coding_indx, ] else NULL
-    results_noncoding_chr <- if (!is.null(results_noncoding_chr)) results_noncoding_chr[selected_noncoding_indx, ] else NULL
-    results_window_chr <- if (!is.null(results_window_chr)) results_window_chr[selected_window_indx, ] else NULL
-    results_indv <- if (!is.null(results_indv)) results_indv$Variant_Estimate[selected_indv_indx,] else NULL
+    results_coding_chr <- if ((!is.null(results_coding_chr)) & (length(selected_coding_indx)>0)) results_coding_chr[selected_coding_indx, ] else NULL
+    results_noncoding_chr <- if ((!is.null(results_noncoding_chr)) & (length(selected_noncoding_indx)>0)) results_noncoding_chr[selected_noncoding_indx, ] else NULL
+    results_window_chr <- if ((!is.null(results_window_chr)) & (length(selected_window_indx)>0)) results_window_chr[selected_window_indx, ] else NULL
+    results_indv <- if ((!is.null(results_indv)) & (length(selected_indv_indx)>0)) results_indv$Variant_Estimate[selected_indv_indx,] else NULL
 
-    X_indv <- X_indv[selected_indv_indx, ]
-    X_coding <- X_coding[selected_coding_indx, ]
-    X_noncoding <- X_noncoding[selected_noncoding_indx, ]
-    X_window <- X_window[selected_window_indx, ]
+    X_indv <- if(!is.null(results_indv)) X_indv[selected_indv_indx, ] else NULL
+    X_coding <- if(!is.null(results_coding_chr)) X_coding[selected_coding_indx, ] else NULL
+    X_noncoding <- if(!is.null(results_noncoding_chr)) X_noncoding[selected_noncoding_indx, ] else NULL
+    X_window <- if(!is.null(results_window_chr)) X_window[selected_window_indx, ] else NULL
 
     return(list(X_indv=X_indv, X_coding=X_coding, X_noncoding=X_noncoding, X_window=X_window, Y_indv = results_indv, Y_coding = results_coding_chr, Y_noncoding = results_noncoding_chr, Y_window = results_window_chr))
   } else {
