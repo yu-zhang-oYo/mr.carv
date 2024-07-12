@@ -21,7 +21,7 @@ select_LE_Estimate(
   Annotation_dir = "annotation/info/FunctionalAnnotation",
   Annotation_name_catalog,
   le_threshold = 0.1,
-  pvalues_weight = FALSE,
+  pvalues_weight = TRUE,
   silent = FALSE
 )
 }
@@ -59,7 +59,7 @@ or the output from \code{fitNullModel} function in the \code{GENESIS} package an
 
 \item{le_threshold}{Threshold for linkage disequilibrium (LD) correlation to define independent sets. Default is 0.1.}
 
-\item{pvalues_weight}{Logical; if TRUE, uses p-values to weight the selection of independent SNPs, if FALSE, randomly select one set with independent SNPs. Default is FALSE.}
+\item{pvalues_weight}{Logical; if TRUE, uses p-values to weight the selection of independent SNPs, if FALSE, randomly select one set with independent SNPs. Default is TRUE.}
 
 \item{silent}{Logical; if TRUE, suppresses messages. Default is FALSE.}
 }

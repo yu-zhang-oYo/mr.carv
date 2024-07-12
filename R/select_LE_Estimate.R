@@ -21,7 +21,7 @@
 #' @param Annotation_dir Directory for functional annotation information in the aGDS file. Default is "annotation/info/FunctionalAnnotation".
 #' @param Annotation_name_catalog A data frame containing the name and the corresponding channel name in the aGDS file.
 #' @param le_threshold Threshold for linkage disequilibrium (LD) correlation to define independent sets. Default is 0.1.
-#' @param pvalues_weight Logical; if TRUE, uses p-values to weight the selection of independent SNPs, if FALSE, randomly select one set with independent SNPs. Default is FALSE.
+#' @param pvalues_weight Logical; if TRUE, uses p-values to weight the selection of independent SNPs, if FALSE, randomly select one set with independent SNPs. Default is TRUE.
 #' @param silent Logical; if TRUE, suppresses messages. Default is FALSE.
 #'
 #' @return A list containing:
@@ -37,7 +37,7 @@ select_LE_Estimate <- function(chr, df_indv, df_coding, df_noncoding, df_window,
                                QC_label="annotation/filter",variant_type_indv=c("SNV","Indel","variant"),variant_type_gene=c("SNV","Indel","variant"),
                                geno_missing_imputation=c("mean","minor"),
                                Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,
-                               le_threshold=0.1, pvalues_weight=FALSE, silent=FALSE){
+                               le_threshold=0.1, pvalues_weight=TRUE, silent=FALSE){
 
   # Get the individual variant summary effect on the chromosome
   df_indv_chr <- df_indv[df_indv$CHR == chr, ]
