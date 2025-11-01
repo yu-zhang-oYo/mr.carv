@@ -1,9 +1,5 @@
 # mr.carv: An R package for performing two sample Mendelian Randomization considering both common and rare variants
 
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/mr.carv)](https://cran.r-project.org/package=mr.carv)
-[![Travis-CI Build Status](https://travis-ci.org/yourusername/mr.carv.svg?branch=master)](https://travis-ci.org/yourusername/mr.carv)
-[![Coverage Status](https://img.shields.io/codecov/c/github/yourusername/mr.carv/master.svg)](https://codecov.io/github/yourusername/mr.carv?branch=master)
-
 ## Overview
 
 `mr.carv` is an R package designed for performing two sample Mendelian Randomization considering both common and rare variants. It leverages the functionality of the `STAARpipeline` package to provide powerful tools to get the summary statistics of whole-genome sequencing.
